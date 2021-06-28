@@ -67,4 +67,4 @@ This project has 3 stages well defined:
 
 ## Choosen location (SPOILER ALERT!):
 
-![NOT TATTOINE!](https://github.com/ccastroblua/geospatial_project/blob/main/images/map-extended.jpg)
+![NOT TATTOINE!](images/map_extended.JPG)
