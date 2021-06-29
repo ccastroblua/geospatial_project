@@ -12,13 +12,19 @@ gm_key = os.getenv("token")
 
 # Function to send an specific request to Google Maps API:
 def get_places(lat, lon, radius, keyword = "", type_ = ""):
-    """
-    Args:
-    lat: Latitude
-    lon: Longitude
-    radius: Radius of the search near by
-    keyword: To search for afinity
-    type_: Different type of places to search ("restaurants", etc)
+    """It gets a response from Google API with a max of 20 results to a determined request with
+    keywords, type of place, longitude, latitude and radius.
+
+    Parameters:
+    lat (float): Latitude
+    lon (float): Longitude
+    radius (float): Radius of the search near by
+    keyword (str): To search for afinity. Can be many words
+    type_ (str): Different type of places to search ("restaurants", etc). Has to be only one word
+    
+    Returns: 
+    list: list of diccionaries (JSON format) with a maximum of 20 places that fullfil asked conditions 
+    
     """
     
     url_nearby_search = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
@@ -38,11 +44,19 @@ def get_places(lat, lon, radius, keyword = "", type_ = ""):
 
 # Function to create a list of dic for the weight matrix:
 def weight_matrix(list_dic, initial_index, last_index):
-    """
-    ARGS:
-    data = list of dicctionaries, json structured.
-    initial_index = first index of the list to loop.
-    last_index = last index of the list to loop.
+    """ It reads a list of locations generate a weight matrix with some specific requirements for this project
+    connecting with MongoDB collection and Google Maps API and get the results.
+    Each columns (conditions) can have a number from 0 (no places near by with that condition) to 20 (that many places).
+    
+    Parameters:
+    data (list): list of dicctionaries, json structured.
+    initial_index (int): First index of the list to loop.
+    last_index (int): last index of the list to loop.
+
+    Returns: 
+    list: list of diccionaries (JSON format) with name of the place, latitude, longitude,
+    and a column for each condition.
+
     """
     new_list = list()
 
@@ -178,6 +192,19 @@ def weight_matrix(list_dic, initial_index, last_index):
 
 # This function add up the information of a query to a list in order to graphic that information with folium
 def mongo_places(query_results, place_type, places_list):
+    """It adds name, place type, latitude and longitude to a current list with a specific query result from pymongo.
+    
+    Parameters:
+    query_results (list): list with a query result from pymongo
+    place_type (str): type of place
+    place_list (list): current list where we will add some more row of data
+
+    Returns: 
+    list: list of diccionaries (JSON format) with name of the place, latitude, longitude,
+    and a column for each condition.
+
+    """
+    
     for i in query_results:
     
         name = i["name"]
@@ -197,6 +224,18 @@ def mongo_places(query_results, place_type, places_list):
 
 # This function add up the information of a Google Maps API request to a list in order to graphic that information with folium
 def google_places(response, place_type, places_list):
+    """It adds name, place type, latitude and longitude to a current list with a specific response from Google Maps API.
+    
+    Parameters:
+    response (dic): dicctionaries with a response from Google Maps API.
+    place_type (str): type of place
+    place_list (list): current list where we will add some more row of data
+
+    Returns: 
+    list: list of diccionaries (JSON format) with name of the place, latitude, longitude,
+    and a column for each condition.
+
+    """
     for result in response["results"]:
         name = result["name"]
         place_type = place_type
